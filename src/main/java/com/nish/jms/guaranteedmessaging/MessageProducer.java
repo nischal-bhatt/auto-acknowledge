@@ -24,9 +24,12 @@ public class MessageProducer {
 		//Queue replyQueue = (Queue) initialContext.lookup("queue/replyQueueNish123");
 
 		try (ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory();
-				JMSContext jmsContext = cf.createContext(JMSContext.AUTO_ACKNOWLEDGE)) {
-			JMSProducer producer = jmsContext.createProducer();
+			//	JMSContext jmsContext = cf.createContext(JMSContext.AUTO_ACKNOWLEDGE)) {
+			      JMSContext jmsContext = cf.createContext(JMSContext.SESSION_TRANSACTED)){
+				JMSProducer producer = jmsContext.createProducer();
 			producer.send(requestQueue, "mssage 1");
+			producer.send(requestQueue, "mssage 2");
+			jmsContext.commit();
 			
 		}
 		;

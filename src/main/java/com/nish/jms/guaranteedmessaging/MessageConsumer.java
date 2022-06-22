@@ -21,14 +21,16 @@ public class MessageConsumer {
 		//Queue replyQueue = (Queue) initialContext.lookup("queue/replyQueueNish123");
 
 		try (ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory();
-				JMSContext jmsContext = cf.createContext()) {
-			
+				//JMSContext jmsContext = cf.createContext(JMSContext.CLIENT_ACKNOWLEDGE)) {
+				JMSContext jmsContext = cf.createContext(JMSContext.SESSION_TRANSACTED)) {
 			
 			JMSConsumer consumer = jmsContext.createConsumer(requestQueue);
 			
 			TextMessage receive = (TextMessage) consumer.receive();
 		    System.out.println(receive.getText());
-		    Thread.sleep(10000);
+		    jmsContext.commit();
+		   // receive.acknowledge(); //only this sentence will cause the message on the queue to be deleted
+		    //Thread.sleep(10000);
 		}
 		;
 	}
